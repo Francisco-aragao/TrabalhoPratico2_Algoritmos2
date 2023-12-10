@@ -1,23 +1,24 @@
 import networkx
 import branchAndBound
 
-
 def christofides(coord, edgesWeight):
     adjacencyList = networkx.from_numpy_array(edgesWeight) #crio grafo
     minimumSpanningTree = networkx.minimum_spanning_tree(adjacencyList, algorithm='kruskal') #encontro arvore geradora minima
 
-    vertexDegrees = [0 for i in range(0, len(minimumSpanningTree)) ] #acho todos os graus dos vertices
-
+    vertexDegrees = [0 for i in range(0, len(minimumSpanningTree)) ] 
+    
+    #acho todos os graus dos vertices
     for i in minimumSpanningTree.edges:
         vertexDegrees[i[0]] += 1
         vertexDegrees[i[1]] += 1
     
+    #acho vertices de grau impar
     vertexOddDegrees = []
     for i in range(len(vertexDegrees)):
         if (vertexDegrees[i] % 2 == 1 and not(vertexOddDegrees.__contains__(i))):
             vertexOddDegrees.append(i)
 
-    subgraphOddDegrees = adjacencyList.subgraph(vertexOddDegrees) 
+    subgraphOddDegrees = adjacencyList.subgraph(vertexOddDegrees) # crio subgrafo com os vertices de grau impar
 
     minMatching = networkx.min_weight_matching(subgraphOddDegrees) #encontro o matching de peso minimo entre os vertices de grau impar
     
